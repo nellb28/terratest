@@ -77,3 +77,15 @@ func NewDynamoDBClientE(t testing.TestingT, region string) (*dynamodb.DynamoDB, 
 	}
 	return dynamodb.New(sess), nil
 }
+
+
+// Nell's sample
+func GetNellSampleDynamoDBTableE(t testing.TestingT, region string, tableName string) (*dynamodb.TableDescription, error) {
+	out, err := NewDynamoDBClient(t, region).DescribeTable(&dynamodb.DescribeTableInput{
+		TableName: aws.String(tableName),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return out.Table, err
+}
