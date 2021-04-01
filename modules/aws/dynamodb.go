@@ -89,3 +89,22 @@ func GetNellSampleDynamoDBTableE(t testing.TestingT, region string, tableName st
 	}
 	return out.Table, err
 }
+
+// GetContinuousBackupsStatus fetches the dynamoDB tables continuous backup status. This will fail the test if there are any errors.
+func GetContinuousBackupsStatus(t testing.TestingT, region string, tableName string) *DescribeContinuousBackupsOutput {
+	continuousBackupsOutput, err := GetContinuousBackupsStatusE(t, region, tableName)
+	require.NoError(t, err)
+	return continuousBackupsOutput
+}
+
+
+// GetContinuousBackupsStatus fetches the dynamoDB tables continuous backup status.
+func GetContinuousBackupsStatusE(t testing.TestingT, region string, tableName string) (*DescribeContinuousBackupsOutput, error) {
+	out, err := NewDynamoDBClient(t, region).DescribeTable(&DescribeContinuousBackupsInput{
+		TableName: aws.String(tableName),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return out.continuousBackupsOutput, err
+}
